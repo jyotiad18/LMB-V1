@@ -1,2 +1,2 @@
-# LMB-V1
-LMB - Node, express, mongodb
+# LMB
+LMB - Application Backend - node + express + mongodb + documentation
