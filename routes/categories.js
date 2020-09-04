@@ -19,7 +19,7 @@ router.use(authorize('admin'));
 
 router
 	.route('/')
-	.get(advancedResults(Category), getCategories)
+	.get(advancedResults(Category, 'user'), getCategories)
 	.post(createCategory);
 
 router

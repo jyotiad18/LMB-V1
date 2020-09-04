@@ -13,7 +13,7 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/categories/:id
 // @access    Private/Admin
 exports.getCategory = asyncHandler(async (req, res, next) => {
-	const catgory = await Category.findById(req.params.id);
+	const catgory = await Category.findById(req.params.id).populate('user');
 
 	res.status(200).json({
 		success: true,
