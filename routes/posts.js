@@ -5,6 +5,7 @@ const {
   createPost,
   updatePost,
   deletePost,
+  uploadPhoto,
 } = require("../controllers/posts");
 
 const Post = require("../models/Post");
@@ -21,6 +22,10 @@ router
   .route("/")
   .get(advancedResults(Post, ["user", "category"]), getPosts)
   .post(createPost);
+
+router
+    .route("/:id/photo")
+    .put(uploadPhoto);
 
 router.route("/:id")
 	.get(getPost)
