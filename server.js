@@ -26,6 +26,7 @@ const users = require('./routes/users');
 const categories = require('./routes/categories');
 const posts = require("./routes/posts");
 const comments = require("./routes/comments");
+const images = require("./routes/images");
 
 const app = express();
 
@@ -69,12 +70,12 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount routers
-
 app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
 app.use('/api/v1/categories', categories);
 app.use("/api/v1/comments", comments);
 app.use("/api/v1/posts", posts);
+app.use("/api/v1/images", images);
 
 app.use(errorHandler);
 

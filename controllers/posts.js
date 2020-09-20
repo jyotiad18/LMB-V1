@@ -3,6 +3,7 @@ const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
+const Image = require('../models/Image');
 
 // @desc      Get all Post
 // @route     GET /api/v1/posts
@@ -15,13 +16,11 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/posts/:id
 // @access    Private/Admin
 exports.getPost = asyncHandler(async (req, res, next) => {
-  let post = await (await Post.findById(req.params.id))
-    .populate(["user", "category"]);
-    /*.populate({
-      path: "comments",
-      match: { post: "5f5d4452335bee14f0f374ae" },
-    });
-   */
+  let post = await (await Post.findById(req.params.id)).populate([
+    "user",
+    "category",
+    "photos.photo"
+  ]);
   
   const comments = await Comment.find({ post: req.params.id });
   post['comments'] = comments;
@@ -121,13 +120,9 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
     if (err) {
       console.error(err);
       return next(new ErrorResponse(`Problem with file upload`, 500));
-    }
-    
-    const photos = post['photos'];
-    photos.push({ 'photo': file.name });
-    
-    await Post.findByIdAndUpdate(req.params.id, { photos: photos });
-
+    }    
+    const image = await Image.create({ 'name': file.name });
+    await Post.findByIdAndUpdate(req.params.id, { photos: image._id });
     res.status(200).json({
       success: true,
       data: file.name,

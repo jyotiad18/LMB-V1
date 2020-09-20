@@ -31,7 +31,14 @@ const PostSchema = new mongoose.Schema({
     default: Date.now,
   },
   comments: [],
-  photos: [],
+  photos: [
+    {
+      photo: {
+        type: mongoose.Schema.ObjectId,
+        ref: "Image"
+      }
+    }
+  ],
   category: {
     type: mongoose.Schema.ObjectId,
     ref: "Catgory",
