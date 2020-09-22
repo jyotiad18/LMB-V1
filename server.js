@@ -27,6 +27,7 @@ const categories = require('./routes/categories');
 const posts = require("./routes/posts");
 const comments = require("./routes/comments");
 const images = require("./routes/images");
+const likes = require("./routes/likes");
 
 const app = express();
 
@@ -75,7 +76,8 @@ app.use('/api/v1/users', users);
 app.use('/api/v1/categories', categories);
 app.use("/api/v1/comments", comments);
 app.use("/api/v1/posts", posts);
-app.use("/api/v1/images", images);
+app.use("/api/v1/:postid/images", images);
+app.use("/api/v1/likes", likes)
 
 app.use(errorHandler);
 

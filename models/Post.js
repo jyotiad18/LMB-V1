@@ -31,12 +31,15 @@ const PostSchema = new mongoose.Schema({
     default: Date.now,
   },
   comments: [],
-  photos: [
-    {
-      photo: {
-        type: mongoose.Schema.ObjectId,
-        ref: "Image"
-      }
+  likes: {
+    type: Number,
+    default: 1
+  },
+  photos: [{
+    photo: {
+      type: mongoose.Schema.ObjectId,
+      ref: "Image"
+    }
     }
   ],
   category: {
@@ -48,7 +51,7 @@ const PostSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "User",
     required: true,
-  },
+  }  
 });
 
 module.exports = mongoose.model("Post", PostSchema);
