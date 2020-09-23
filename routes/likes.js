@@ -6,10 +6,10 @@ const {
 
 const router = express.Router({ mergeParams: true });
 
-router.route("/inImage/:id")
+router.route("/image/:id")
 	.put(updateImage)
 
-router.route("/inPost/:id")
+router.route("/post/:id")
 	.put(updatePost);
 	
 module.exports = router;

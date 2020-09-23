@@ -13,19 +13,40 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
 
 // @desc      Get single Post
 // @route     GET /api/v1/posts/:id
-// @access    Private/Admin
 exports.getPost = asyncHandler(async (req, res, next) => {
-  let post = await Post.findById(req.params.id)
-    .populate(['category', 'user', 'photos.photo']);
-  
-  const comments = await Comment.find({ post: req.params.id });
-  post['comments'] = comments;
-
+  const post = await Post.findById(req.params.id)
+    .populate([
+    "category",
+    "user",
+    "photos.photo",
+    "comments.comment",
+    ]);
+    
 	res.status(200).json({
 		success: true,
 		data: post
 	});
 });
+
+// @desc      Get Post By Category
+// @route     GET /api/v1/posts/catgory/:id
+exports.getPostByCategory = asyncHandler(async (req, res, next) => {
+  const post = await Post.find({ category: req.params.id }).populate([    
+    "photos.photo",
+    "comments.comment",
+  ]);
+  if (!post)
+  {
+    return next(
+      new ErrorResponse(`Category not found with id of ${req.params.id}`, 404)
+    );
+  }
+  res.status(200).json({
+    success: true,
+    data: post,
+  });
+});
+
 
 // @desc      Create Post
 // @route     POST /api/v1/posts

@@ -6,7 +6,6 @@ const Post = require("../models/Post");
 // @desc      Update like for images
 // @route     PUT /api/v1/likes/images/:id
 exports.updateImage = asyncHandler(async (req, res, next) => {
-	console.log(req.params.id);
 	const _id = req.params.id;
 
 	const image = await Image.findById(_id);

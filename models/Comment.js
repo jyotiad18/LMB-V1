@@ -18,12 +18,7 @@ const CommentSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-  },
-  post: {
-    type: mongoose.Schema.ObjectId,
-    ref: "Post",
-    required: true,
-  },
+  }
 });
 
 module.exports = mongoose.model("Comment", CommentSchema);

@@ -4,7 +4,8 @@ const {
   getPost,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  getPostByCategory,
 } = require("../controllers/posts");
 
 const Post = require("../models/Post");
@@ -19,11 +20,33 @@ router.use(authorize("admin"));
 
 router
   .route("/")
-  .get(advancedResults(Post, ["user", "category"]), getPosts)
+  .get(
+    advancedResults(Post, [
+      "category",
+      "user",
+      "photos.photo",
+      "comments.comment",
+    ]),
+    getPosts
+);
+router
+  .route("/:id")
+  .get(getPost);
+
+router
+  .route("/category/:id")
+  .get(getPostByCategory)
+  
+router
+  .use(protect)
+  .use(authorize("admin"))
+  .route("/")  
   .post(createPost);
 
-router.route("/:id")
-	.get(getPost)
+router
+  .use(protect)
+  .use(authorize("admin"))
+  .route("/:id")	
 	.put(updatePost)
 	.delete(deletePost);
 

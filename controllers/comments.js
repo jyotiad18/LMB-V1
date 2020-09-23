@@ -1,6 +1,7 @@
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Comment = require("../models/Comment");
+const Post = require("../models/Post");
 
 // @desc      Get all Comment
 // @route     GET /api/v1/comments
@@ -25,8 +26,19 @@ exports.getComment = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/comments
 // @access    Private/Admin
 exports.createComment = asyncHandler(async (req, res, next) => {
-  const comment = await Comment.create(req.body);
-
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    return next(
+      new ErrorResponse(`Post not found with id of ${req.params.id}`, 404)
+    );
+  }
+  console.log(req.body);
+  const comment = await Comment.create(req.body);  
+  const comments = post.comments;
+  comments.push({
+    comment: comment._id
+  });
+  await Post.findByIdAndUpdate(req.params.id, { comments: comments });
   res.status(201).json({
     success: true,
     data: comment,
