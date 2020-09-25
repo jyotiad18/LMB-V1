@@ -8,6 +8,13 @@ const {
   getPostByCategory,
 } = require("../controllers/posts");
 
+const {
+  createImage, 
+  deleteImage
+} = require("../controllers/images");
+
+const { updatePostLikes } = require("../controllers/likes");
+
 const Post = require("../models/Post");
 
 const router = express.Router({ mergeParams: true });
@@ -48,6 +55,24 @@ router
   .use(authorize("admin"))
   .route("/:id")	
 	.put(updatePost)
-	.delete(deletePost);
+  .delete(deletePost);
+
+  /* Sub route for likes */
+router
+  .route("/:id/likes")
+  .put(updatePostLikes);
+
+/* Sub route for Images */
+router
+  .use(protect)
+  .use(authorize("admin"))
+  .route("/:id/images")
+  .post(createImage);
+  
+router
+  .use(protect)
+  .use(authorize("admin"))
+  .route("/:id/images/:imageid")
+  .delete(deleteImage);
 
 module.exports = router;

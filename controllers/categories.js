@@ -43,9 +43,9 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
 	});
 
 	res.status(200).json({
-		success: true,
-		data: user
-	});
+    success: true,
+    data: catgory,
+  });
 });
 
 // @desc      Delete Category

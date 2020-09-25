@@ -76,8 +76,7 @@ app.use('/api/v1/users', users);
 app.use('/api/v1/categories', categories);
 app.use("/api/v1/comments", comments);
 app.use("/api/v1/posts", posts);
-app.use("/api/v1/likes", likes);
-app.use("/api/v1/:postid/images", images);
+app.use("/api/v1/images", images);
 
 app.use(errorHandler);
 

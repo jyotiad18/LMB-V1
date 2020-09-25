@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middleware/async");
 const Image = require("../models/Image");
@@ -25,10 +26,10 @@ exports.getImage = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Create Image of Post 
-// @route     POST /api/v1/:postid/images
+// @route     POST /api/v1/posts/:id/images
 // @access    Private/Admin
 exports.createImage = asyncHandler(async (req, res, next) => {
-  const postId = req.params.postid;  
+  const postId = req.params.id;  
   const post = await Post.findById(postId);  
   if (!post) {
     return next(
@@ -105,13 +106,32 @@ exports.updateImage = asyncHandler(async (req, res, next) => {
 });
 
 // @desc      Delete Image
-// @route     DELETE /api/v1/images/:id
+// @route     DELETE /api/v1/posts/:id/images/:imageid
 // @access    Private/Admin
 exports.deleteImage = asyncHandler(async (req, res, next) => {
-  await Image.findByIdAndDelete(req.params.id);
+  const postId = req.params.id;
+  const imageId = req.params.imageid;
+  const post = await Post.findById(postId);
+  const image = await Image.findById(imageId)
+  if (!post) {
+    return new ErrorResponse(`Post not found with id of ${postId}`, 404);
+  }
+  if (!image) {
+    return new ErrorResponse(`Image not found with id of ${imageId}`, 404);
+  }
 
-  res.status(200).json({
-    success: true,
-    data: {},
-  });
+  //delete image from folder  
+    
+  fs.unlink(`${process.env.FILE_UPLOAD_PATH}/${image.name}`, async (err) => {
+    if (err) {      
+      return next(new ErrorResponse(`Problem with file remove.`, 500));
+    }
+    const _id = await Post.find({ photos : { photo : imageId } });    
+    await Post.photos.findByIdAndDelete(_id);
+    await Image.findByIdAndDelete(imageId);
+    res.status(200).json({
+      success: true,
+      data: {},
+    });
+  });       
 });
