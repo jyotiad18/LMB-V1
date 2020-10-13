@@ -26,9 +26,7 @@ router.use(protect);
 router.use(authorize("admin"));
 
 router
-  .route("/")
-  .get(
-    advancedResults(Post, [
+  .route("/").get(advancedResults(Post, [
       "category",
       "user",
       "photos.photo",
@@ -36,9 +34,7 @@ router
     ]),
     getPosts
 );
-router
-  .route("/:id")
-  .get(getPost);
+router.route("/:id").get(getPost);
 
 router
   .route("/category/:id")
